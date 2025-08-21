@@ -1,227 +1,188 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const addContactButton = document.getElementById('addContact');
+// --- Helper Functions ---
+function saveContactsToStorage(contacts) {
+    localStorage.setItem('contacts', JSON.stringify(contacts));
+}
 
-    const createDeleteButton = () => {
-        const deleteButton = document.createElement('button');
-        deleteButton.textContent = '×';
-        deleteButton.style.cssText = `
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #8b5e3c;
-            color: #fff;
-            border: none;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            font-size: 16px;
-            cursor: pointer;
-        `;
-        deleteButton.addEventListener('click', (e) => {
-            e.target.closest('.contact-card').remove();
-            saveContactsToLocalStorage();
-        });
-        return deleteButton;
-    };
+function loadContactsFromStorage() {
+    return JSON.parse(localStorage.getItem('contacts')) || [];
+}
 
-    const createEditButton = (card) => {
-        const editButton = document.createElement('button');
-        editButton.textContent = 'Edit';
-        editButton.style.cssText = `
-            position: absolute;
-            top: 10px;
-            right: 50px;
-            background: #6e4f4f;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            padding: 5px 10px;
-            font-size: 12px;
-            cursor: pointer;
-        `;
-        editButton.addEventListener('click', () => {
-            const name = prompt('Edit Name:', card.querySelector('h3').textContent);
-            const company = prompt('Edit Company:', card.querySelector('p:nth-of-type(1)').textContent.replace('Company: ', ''));
-            const notes = prompt('Edit Notes:', card.querySelector('.notes').textContent.replace('Notes: ', ''));
-            const profilePicture = prompt('Edit Profile Picture URL:', card.querySelector('img').src);
+// --- Create Delete Button ---
+function createDeleteButton(card, contacts) {
+    const btn = document.createElement('button');
+    btn.textContent = '×';
+    btn.className = 'deleteContact';
+    btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const index = contacts.indexOf(card.contactData);
+        if (index > -1) contacts.splice(index, 1);
+        saveContactsToStorage(contacts);
+        card.remove();
+    });
+    return btn;
+}
 
-            if (name) card.querySelector('h3').textContent = name;
-            if (company) card.querySelector('p:nth-of-type(1)').textContent = `Company: ${company}`;
-            if (notes) card.querySelector('.notes').textContent = `Notes: ${notes}`;
-            if (profilePicture) card.querySelector('img').src = profilePicture;
-        });
-        return editButton;
-    };
+// --- Create Edit Button ---
+function createEditButton(card, contacts) {
+    const btn = document.createElement('button');
+    btn.textContent = 'Edit';
+    btn.className = 'editContact';
+    btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const data = card.contactData;
+        const name = prompt('Edit Name:', data.name);
+        const company = prompt('Edit Company:', data.company);
+        const notes = prompt('Edit Notes:', data.notes);
+        const image = prompt('Edit Image URL or leave blank:', data.image);
 
-    const createContactPopup = (card) => {
-        const popup = document.createElement('div');
-        popup.style.cssText = `
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-        `;
+        if (name) data.name = name;
+        if (company) data.company = company;
+        if (notes) data.notes = notes;
+        if (image) data.image = image;
 
-        const popupContent = document.createElement('div');
-        popupContent.style.cssText = `
-            background: #fff;
-            padding: 40px;
-            border-radius: 8px;
-            max-width: 600px;
-            width: 100%;
-            height: 80%;
-            text-align: center;
-            position: relative;
-            overflow-y: auto;
-        `;
+        updateCard(card, data);
+        saveContactsToStorage(contacts);
+    });
+    return btn;
+}
 
-        const closeButton = document.createElement('button');
-        closeButton.textContent = '×';
-        closeButton.style.cssText = `
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            background: #8b5e3c;
-            color: #fff;
-            border: none;
-            border-radius: 50%;
-            width: 30px;
-            height: 30px;
-            font-size: 16px;
-            cursor: pointer;
-        `;
-        closeButton.addEventListener('click', () => {
-            popup.remove();
-        });
+// --- Update Card ---
+function updateCard(card, data) {
+    card.innerHTML = '';
+    const details = document.createElement('div');
+    details.className = 'contact-details';
+    details.innerHTML = `
+        <h3>${data.name}</h3>
+        <p class="company">Company: ${data.company || 'N/A'}</p>
+        <p class="notes">Notes: ${data.notes || ''}</p>
+    `;
 
-        const profilePicture = document.createElement('img');
-        profilePicture.src = card.querySelector('img').src;
-        profilePicture.alt = 'Profile Picture';
-        profilePicture.style.cssText = 'width: 200px; height: 200px; margin-bottom: 20px;';
+    if (data.image) {
+        const img = document.createElement('img');
+        img.src = data.image;
+        img.alt = 'Profile Picture';
+        card.appendChild(img);
+    } else {
+        const frame = document.createElement('div');
+        frame.className = 'empty-frame';
+        frame.innerHTML = `<button class="add-picture-btn">+ Add Picture</button>`;
+        card.appendChild(frame);
 
-        const name = document.createElement('h2');
-        name.textContent = card.querySelector('h3').textContent;
-
-        const company = document.createElement('p');
-        company.textContent = `Company: ${card.querySelector('p:nth-of-type(1)').textContent.replace('Company: ', '')}`;
-
-        const notes = document.createElement('p');
-        notes.textContent = `Notes: ${card.querySelector('.notes').textContent.replace('Notes: ', '')}`;
-
-        popupContent.appendChild(closeButton);
-        popupContent.appendChild(profilePicture);
-        popupContent.appendChild(name);
-        popupContent.appendChild(company);
-        popupContent.appendChild(notes);
-        popup.appendChild(popupContent);
-
-        document.body.appendChild(popup);
-    };
-
-    const saveContactsToLocalStorage = () => {
-        const contacts = [];
-        document.querySelectorAll('.contact-card').forEach(card => {
-            contacts.push({
-                name: card.querySelector('h3').textContent,
-                company: card.querySelector('p:nth-of-type(1)').textContent.replace('Company: ', ''),
-                notes: card.querySelector('.notes').textContent.replace('Notes: ', ''),
-                profilePicture: card.querySelector('img').src
-            });
-        });
-        localStorage.setItem('contacts', JSON.stringify(contacts));
-    };
-
-    const loadContactsFromLocalStorage = () => {
-        const contacts = JSON.parse(localStorage.getItem('contacts')) || [];
-        const container = document.querySelector('.container');
-        container.innerHTML = ''; // Clear existing content to avoid duplication
-        contacts.forEach(contact => {
-            const newCard = document.createElement('div');
-            newCard.className = 'contact-card';
-            newCard.style.position = 'relative';
-            newCard.innerHTML = `
-                <img src='${contact.profilePicture}' alt='Profile Picture'>
-                <div class='contact-details'>
-                    <h3>${contact.name}</h3>
-                    <p>Company: ${contact.company}</p>
-                    <p class='notes'>Notes: ${contact.notes}</p>
-                </div>
-            `;
-            const deleteButton = createDeleteButton();
-            const editButton = createEditButton(newCard);
-            newCard.appendChild(deleteButton);
-            newCard.appendChild(editButton);
-            container.appendChild(newCard);
-
-            newCard.addEventListener('click', (e) => {
-                if (!e.target.classList.contains('deleteContact') && !e.target.textContent.includes('Edit')) {
-                    createContactPopup(newCard);
-                }
-            });
-        });
-    };
-
-    document.addEventListener('DOMContentLoaded', () => {
-        loadContactsFromLocalStorage();
-
-        document.querySelectorAll('.contact-card').forEach(card => {
-            card.addEventListener('click', (e) => {
-                if (!e.target.classList.contains('deleteContact') && !e.target.textContent.includes('Edit')) {
-                    createContactPopup(card);
-                }
-            });
-        });
-
-        addContactButton.addEventListener('click', () => {
-            const name = document.getElementById('newName').value;
-            const company = document.getElementById('newCompany').value;
-            const notes = document.getElementById('newNotes').value;
-
-            if (name || company || notes) {
-                const container = document.querySelector('.container');
-                const newCard = document.createElement('div');
-                newCard.className = 'contact-card';
-                newCard.style.position = 'relative';
-                newCard.innerHTML = `
-                    <img src='https://via.placeholder.com/120' alt='Profile Picture'>
-                    <div class='contact-details'>
-                        <h3>${name || 'Unnamed'}</h3>
-                        <p>Company: ${company || 'Unknown'}</p>
-                        <p class='notes'>Notes: ${notes || 'No notes provided.'}</p>
-                    </div>
-                `;
-                const deleteButton = createDeleteButton();
-                const editButton = createEditButton(newCard);
-                newCard.appendChild(deleteButton);
-                newCard.appendChild(editButton);
-                container.appendChild(newCard);
-
-                newCard.addEventListener('click', (e) => {
-                    if (!e.target.classList.contains('deleteContact') && !e.target.textContent.includes('Edit')) {
-                        createContactPopup(newCard);
-                    }
-                });
-
-                document.getElementById('newName').value = '';
-                document.getElementById('newCompany').value = '';
-                document.getElementById('newNotes').value = '';
-
-                saveContactsToLocalStorage();
-            } else {
-                alert('Please fill out at least one field to add a new contact.');
+        frame.querySelector('.add-picture-btn').addEventListener('click', e => {
+            e.stopPropagation();
+            const url = prompt('Enter image URL:');
+            if (url) {
+                data.image = url;
+                updateCard(card, data);
+                saveContactsToStorage(contacts);
             }
         });
+    }
 
-        document.querySelectorAll('.deleteContact').forEach(button => {
-            button.addEventListener('click', () => {
-                saveContactsToLocalStorage();
-            });
-        });
+    card.appendChild(details);
+    card.contactData = data;
+    attachControls(card, contacts);
+}
+
+// --- Attach Controls ---
+function attachControls(card, contacts) {
+    card.style.position = 'relative';
+    const existingDelete = card.querySelector('.deleteContact');
+    const existingEdit = card.querySelector('.editContact');
+
+    if (!existingDelete) card.appendChild(createDeleteButton(card, contacts));
+    if (!existingEdit) card.appendChild(createEditButton(card, contacts));
+
+    card.addEventListener('click', e => {
+        if (!e.target.classList.contains('deleteContact') && !e.target.classList.contains('editContact') && !e.target.classList.contains('add-picture-btn')) {
+            createContactPopup(card);
+        }
+    });
+}
+
+// --- Render Contact ---
+function renderContact(data, container, contacts) {
+    const card = document.createElement('div');
+    card.className = 'contact-card';
+    card.contactData = data;
+    updateCard(card, data);
+    container.appendChild(card);
+}
+
+// --- Contact Popup ---
+function createContactPopup(card) {
+    const data = card.contactData;
+    const popup = document.createElement('div');
+    popup.style.cssText = `
+        position: fixed; top:0; left:0; width:100%; height:100%;
+        background: rgba(0,0,0,0.8); display:flex;
+        justify-content:center; align-items:center; z-index:1000;
+    `;
+
+    const content = document.createElement('div');
+    content.style.cssText = `
+        background: #fff; padding:40px; border-radius:8px;
+        max-width:600px; width:100%; height:80%;
+        text-align:center; position:relative; overflow-y:auto;
+    `;
+
+    const closeBtn = document.createElement('button');
+    closeBtn.textContent = '×';
+    closeBtn.style.position = 'absolute';
+    closeBtn.style.top = '10px';
+    closeBtn.style.right = '10px';
+    closeBtn.addEventListener('click', () => popup.remove());
+
+    if (data.image) {
+        const img = document.createElement('img');
+        img.src = data.image;
+        img.alt = 'Profile Picture';
+        img.style.width = '200px';
+        img.style.height = '200px';
+        content.appendChild(img);
+    }
+
+    const name = document.createElement('h2');
+    name.textContent = data.name;
+    const company = document.createElement('p');
+    company.textContent = `Company: ${data.company || 'N/A'}`;
+    const notes = document.createElement('p');
+    notes.textContent = `Notes: ${data.notes || ''}`;
+
+    content.append(closeBtn, name, company, notes);
+    popup.appendChild(content);
+    document.body.appendChild(popup);
+}
+
+// --- Load All Contacts ---
+const container = document.querySelector('.container');
+let contacts = loadContactsFromStorage();
+contacts.forEach(contact => renderContact(contact, container, contacts));
+
+// --- Add New Contact ---
+document.getElementById('addContact').addEventListener('click', () => {
+    const name = document.getElementById('newName').value.trim() || 'Unnamed';
+    const company = document.getElementById('newCompany').value.trim() || '';
+    const notes = document.getElementById('newNotes').value.trim() || '';
+    
+    const newContact = { name, company, notes, image: '' };
+    contacts.push(newContact);
+    saveContactsToStorage(contacts);
+    renderContact(newContact, container, contacts);
+
+    document.getElementById('newName').value = '';
+    document.getElementById('newCompany').value = '';
+    document.getElementById('newNotes').value = '';
+});
+
+// --- Search ---
+document.getElementById('searchBar').addEventListener('input', function () {
+    const query = this.value.toLowerCase();
+    document.querySelectorAll('.contact-card').forEach(card => {
+        const data = card.contactData;
+        const match = data.name.toLowerCase().includes(query) ||
+                      data.company.toLowerCase().includes(query) ||
+                      data.notes.toLowerCase().includes(query);
+        card.style.display = match ? 'flex' : 'none';
     });
 });
