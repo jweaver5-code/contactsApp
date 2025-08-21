@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacts Page</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #4b2e2e; /* Darker brown background */
+            color: #fff; /* White text for better contrast */
+        }
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            background: #5c4033; /* Slightly lighter brown for the container */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        .contact-card {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 20px; /* Increased padding for larger sections */
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            background-color: #6e4f4f; /* Even lighter brown for the cards */
+            position: relative; /* Added position relative for delete button */
+        }
+        .contact-card img {
+            width: 120px; /* Larger profile pictures */
+            height: 120px; /* Larger profile pictures */
+            border-radius: 8px; /* Slightly rounded corners for square shape */
+            margin-right: 20px;
+        }
+        .contact-details {
+            flex: 1;
+        }
+        .contact-details h3 {
+            margin: 0 0 5px;
+            font-size: 1.5em; /* Larger font size for names */
+        }
+        .contact-details p {
+            margin: 5px 0;
+            color: #ddd; /* Lighter text for better readability */
+        }
+        .notes {
+            margin-top: 10px;
+            font-style: italic;
+            color: #ccc; /* Even lighter text for notes */
+        }
+        #searchBar {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+        }
+        #addContactControls {
+            display: none;
+            margin-bottom: 20px;
+        }
+        #addContactControls input {
+            margin-right: 10px;
+            padding: 5px;
+        }
+        #addContactControls button {
+            padding: 5px;
+            background-color: #6e4f4f;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        #addContactToggle {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #8b5e3c;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+        .deleteContact {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: #8b5e3c;
+            color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .editContact {
+            position: absolute;
+            top: 10px;
+            right: 50px;
+            background: #6e4f4f;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Contacts</h1>
+
+        <input type="text" id="searchBar" placeholder="Search by name, company, or notes...">
+
+        <button id="addContactToggle">Add Contact</button>
+
+        <div id="addContactControls">
+            <input type="text" id="newName" placeholder="Name">
+            <input type="text" id="newCompany" placeholder="Company">
+            <input type="text" id="newNotes" placeholder="Notes">
+            <button id="addContact">Add</button>
+        </div>
+
+        <div class="contact-card">
+            <img src="https://via.placeholder.com/120" alt="Profile Picture">
+            <div class="contact-details">
+                <h3>John Doe</h3>
+                <p>Company: Tech Solutions</p>
+                <p class="notes">Notes: Great at problem-solving and team collaboration.</p>
+            </div>
+            <button class="deleteContact">×</button>
+            <button class="editContact">Edit</button>
+        </div>
+
+        <div class="contact-card">
+            <img src="https://via.placeholder.com/120" alt="Profile Picture">
+            <div class="contact-details">
+                <h3>Jane Smith</h3>
+                <p>Company: Creative Agency</p>
+                <p class="notes">Notes: Excellent designer with a keen eye for detail.</p>
+            </div>
+            <button class="deleteContact">×</button>
+            <button class="editContact">Edit</button>
+        </div>
+
+        <div class="contact-card">
+            <img src="https://via.placeholder.com/120" alt="Profile Picture">
+            <div class="contact-details">
+                <h3>Michael Brown</h3>
+                <p>Company: Finance Corp</p>
+                <p class="notes">Notes: Expert in financial analysis and planning.</p>
+            </div>
+            <button class="deleteContact">×</button>
+            <button class="editContact">Edit</button>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('searchBar').addEventListener('input', function() {
+            const query = this.value.toLowerCase();
+            const contactCards = document.querySelectorAll('.contact-card');
+
+            contactCards.forEach(card => {
+                const name = card.querySelector('h3').textContent.toLowerCase();
+                const company = card.querySelector('p:nth-of-type(1)').textContent.toLowerCase();
+                const notes = card.querySelector('.notes').textContent.toLowerCase();
+
+                if (name.includes(query) || company.includes(query) || notes.includes(query)) {
+                    card.style.display = 'flex';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        });
+
+        const addContactToggle = document.getElementById('addContactToggle');
+        const addContactControls = document.getElementById('addContactControls');
+        const addContactButton = document.getElementById('addContact');
+
+        addContactToggle.addEventListener('click', () => {
+            addContactControls.style.display = addContactControls.style.display === 'none' ? 'block' : 'none';
+        });
+
+        const createDeleteButton = () => {
+            const deleteButton = document.createElement('button');
+            deleteButton.textContent = '×';
+            deleteButton.className = 'deleteContact';
+            deleteButton.style.cssText = `
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                background: #8b5e3c;
+                color: #fff;
+                border: none;
+                border-radius: 50%;
+                width: 30px;
+                height: 30px;
+                font-size: 16px;
+                cursor: pointer;
+            `;
+            deleteButton.addEventListener('click', (e) => {
+                e.target.closest('.contact-card').remove();
+            });
+            return deleteButton;
+        };
+
+        const createEditButton = (card) => {
+            const editButton = document.createElement('button');
+            editButton.textContent = 'Edit';
+            editButton.style.cssText = `
+                position: absolute;
+                top: 10px;
+                right: 50px;
+                background: #6e4f4f;
+                color: #fff;
+                border: none;
+                border-radius: 5px;
+                padding: 5px 10px;
+                font-size: 12px;
+                cursor: pointer;
+            `;
+            editButton.addEventListener('click', () => {
+                const name = prompt('Edit Name:', card.querySelector('h3').textContent);
+                const company = prompt('Edit Company:', card.querySelector('p:nth-of-type(1)').textContent.replace('Company: ', ''));
+                const notes = prompt('Edit Notes:', card.querySelector('.notes').textContent.replace('Notes: ', ''));
+                const profilePicture = prompt('Edit Profile Picture URL:', card.querySelector('img').src);
+
+                if (name) card.querySelector('h3').textContent = name;
+                if (company) card.querySelector('p:nth-of-type(1)').textContent = `Company: ${company}`;
+                if (notes) card.querySelector('.notes').textContent = `Notes: ${notes}`;
+                if (profilePicture) card.querySelector('img').src = profilePicture;
+            });
+            return editButton;
+        };
+
+        const createContactPopup = (card) => {
+            const popup = document.createElement('div');
+            popup.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.8);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 1000;
+            `;
+
+            const popupContent = document.createElement('div');
+            popupContent.style.cssText = `
+                background: #fff;
+                padding: 40px;
+                border-radius: 8px;
+                max-width: 600px;
+                width: 100%;
+                height: 80%;
+                text-align: center;
+                position: relative;
+                overflow-y: auto;
+            `;
+
+            popupContent.innerHTML = ''; // Clear existing content
+
+            const closeButton = document.createElement('button');
+            closeButton.textContent = '×';
+            closeButton.style.cssText = `
+                position: absolute;
+                top: 10px;
+                right: 10px;
+                background: #8b5e3c;
+                color: #fff;
+                border: none;
+                border-radius: 50%;
+                width: 30px;
+                height: 30px;
+                font-size: 16px;
+                cursor: pointer;
+            `;
+            closeButton.addEventListener('click', () => {
+                popup.remove();
+            });
+
+            const profilePicture = document.createElement('img');
+            profilePicture.src = card.querySelector('img').src;
+            profilePicture.alt = 'Profile Picture';
+            profilePicture.style.cssText = 'width: 200px; height: 200px; margin-bottom: 20px;';
+
+            const name = document.createElement('h2');
+            name.textContent = card.querySelector('h3').textContent;
+
+            const company = document.createElement('p');
+            company.textContent = `Company: ${card.querySelector('p:nth-of-type(1)').textContent.replace('Company: ', '')}`;
+
+            const notes = document.createElement('p');
+            notes.textContent = `Notes: ${card.querySelector('.notes').textContent.replace('Notes: ', '')}`;
+
+            popupContent.appendChild(closeButton);
+            popupContent.appendChild(profilePicture);
+            popupContent.appendChild(name);
+            popupContent.appendChild(company);
+            popupContent.appendChild(notes);
+            popup.appendChild(popupContent);
+
+            document.body.appendChild(popup);
+        };
+
+        document.querySelectorAll('.contact-card').forEach(card => {
+            const deleteButton = createDeleteButton();
+            const editButton = createEditButton(card);
+            card.style.position = 'relative';
+            card.appendChild(deleteButton);
+            card.appendChild(editButton);
+
+            card.addEventListener('click', (e) => {
+                if (!e.target.classList.contains('deleteContact') && !e.target.textContent.includes('Edit')) {
+                    createContactPopup(card);
+                }
+            });
+        });
+
+        addContactButton.addEventListener('click', () => {
+            const name = document.getElementById('newName').value;
+            const company = document.getElementById('newCompany').value;
+            const notes = document.getElementById('newNotes').value;
+
+            if (name || company || notes) {
+                const container = document.querySelector('.container');
+                const newCard = document.createElement('div');
+                newCard.className = 'contact-card';
+                newCard.style.position = 'relative';
+                newCard.innerHTML = `
+                    <img src='https://via.placeholder.com/120' alt='Profile Picture'>
+                    <div class='contact-details'>
+                        <h3>${name || 'Unnamed'}</h3>
+                        <p>Company: ${company || 'Unknown'}</p>
+                        <p class='notes'>Notes: ${notes || 'No notes provided.'}</p>
+                    </div>
+                `;
+                const deleteButton = createDeleteButton();
+                const editButton = createEditButton(newCard);
+                newCard.appendChild(deleteButton);
+                newCard.appendChild(editButton);
+                container.appendChild(newCard);
+
+                newCard.addEventListener('click', (e) => {
+                    if (!e.target.classList.contains('deleteContact') && !e.target.textContent.includes('Edit')) {
+                        createContactPopup(newCard);
+                    }
+                });
+
+                document.getElementById('newName').value = '';
+                document.getElementById('newCompany').value = '';
+                document.getElementById('newNotes').value = '';
+            } else {
+                alert('Please fill out at least one field to add a new contact.');
+            }
+        });
+    </script>
+    <script src="contacts.js"></script>
+</body>
+</html>
