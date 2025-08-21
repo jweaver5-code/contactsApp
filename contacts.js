@@ -35,28 +35,22 @@ function createEditButton(card, contacts) {
         const notes = prompt('Edit Notes:', data.notes);
         const image = prompt('Edit Image URL or leave blank:', data.image);
 
-        if (name) data.name = name;
-        if (company) data.company = company;
-        if (notes) data.notes = notes;
-        if (image) data.image = image;
+        if (name !== null) data.name = name.trim() || data.name;
+        if (company !== null) data.company = company.trim();
+        if (notes !== null) data.notes = notes.trim();
+        if (image !== null) data.image = image.trim();
 
-        updateCard(card, data);
+        updateCard(card, data, contacts);
         saveContactsToStorage(contacts);
     });
     return btn;
 }
 
 // --- Update Card ---
-function updateCard(card, data) {
+function updateCard(card, data, contacts) {
     card.innerHTML = '';
-    const details = document.createElement('div');
-    details.className = 'contact-details';
-    details.innerHTML = `
-        <h3>${data.name}</h3>
-        <p class="company">Company: ${data.company || 'N/A'}</p>
-        <p class="notes">Notes: ${data.notes || ''}</p>
-    `;
 
+    // Image or placeholder frame
     if (data.image) {
         const img = document.createElement('img');
         img.src = data.image;
@@ -72,12 +66,21 @@ function updateCard(card, data) {
             e.stopPropagation();
             const url = prompt('Enter image URL:');
             if (url) {
-                data.image = url;
-                updateCard(card, data);
+                data.image = url.trim();
+                updateCard(card, data, contacts);
                 saveContactsToStorage(contacts);
             }
         });
     }
+
+    // Contact details
+    const details = document.createElement('div');
+    details.className = 'contact-details';
+    details.innerHTML = `
+        <h3>${data.name}</h3>
+        <p class="company">Company: ${data.company || 'N/A'}</p>
+        <p class="notes">Notes: ${data.notes || ''}</p>
+    `;
 
     card.appendChild(details);
     card.contactData = data;
@@ -87,14 +90,18 @@ function updateCard(card, data) {
 // --- Attach Controls ---
 function attachControls(card, contacts) {
     card.style.position = 'relative';
-    const existingDelete = card.querySelector('.deleteContact');
-    const existingEdit = card.querySelector('.editContact');
 
-    if (!existingDelete) card.appendChild(createDeleteButton(card, contacts));
-    if (!existingEdit) card.appendChild(createEditButton(card, contacts));
+    if (!card.querySelector('.deleteContact')) {
+        card.appendChild(createDeleteButton(card, contacts));
+    }
+    if (!card.querySelector('.editContact')) {
+        card.appendChild(createEditButton(card, contacts));
+    }
 
     card.addEventListener('click', e => {
-        if (!e.target.classList.contains('deleteContact') && !e.target.classList.contains('editContact') && !e.target.classList.contains('add-picture-btn')) {
+        if (!e.target.classList.contains('deleteContact') &&
+            !e.target.classList.contains('editContact') &&
+            !e.target.classList.contains('add-picture-btn')) {
             createContactPopup(card);
         }
     });
@@ -105,7 +112,7 @@ function renderContact(data, container, contacts) {
     const card = document.createElement('div');
     card.className = 'contact-card';
     card.contactData = data;
-    updateCard(card, data);
+    updateCard(card, data, contacts);
     container.appendChild(card);
 }
 
@@ -164,12 +171,13 @@ document.getElementById('addContact').addEventListener('click', () => {
     const name = document.getElementById('newName').value.trim() || 'Unnamed';
     const company = document.getElementById('newCompany').value.trim() || '';
     const notes = document.getElementById('newNotes').value.trim() || '';
-    
+
     const newContact = { name, company, notes, image: '' };
     contacts.push(newContact);
     saveContactsToStorage(contacts);
     renderContact(newContact, container, contacts);
 
+    // clear inputs
     document.getElementById('newName').value = '';
     document.getElementById('newCompany').value = '';
     document.getElementById('newNotes').value = '';
