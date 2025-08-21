@@ -7,15 +7,6 @@ function loadContactsFromStorage() {
     return JSON.parse(localStorage.getItem('contacts')) || [];
 }
 
-function sortContacts(contacts) {
-    // Favorites come first, then alphabetically
-    return contacts.slice().sort((a, b) => {
-        if (a.favorite && !b.favorite) return -1;
-        if (!a.favorite && b.favorite) return 1;
-        return a.name.localeCompare(b.name);
-    });
-}
-
 // --- Create Delete Button ---
 function createDeleteButton(card, contacts) {
     const btn = document.createElement('button');
@@ -51,25 +42,7 @@ function createEditButton(card, contacts) {
 
         updateCard(card, data, contacts);
         saveContactsToStorage(contacts);
-        renderAllContacts(contacts); // re-render to update ordering
     });
-    return btn;
-}
-
-// --- Create Favorite Button ---
-function createFavoriteButton(card, contacts) {
-    const btn = document.createElement('button');
-    btn.textContent = card.contactData.favorite ? '★' : '☆';
-    btn.className = 'favoriteContact';
-    btn.title = 'Toggle Favorite';
-
-    btn.addEventListener('click', e => {
-        e.stopPropagation();
-        card.contactData.favorite = !card.contactData.favorite;
-        saveContactsToStorage(contacts);
-        renderAllContacts(contacts); // re-render so favorites float to top
-    });
-
     return btn;
 }
 
@@ -111,14 +84,6 @@ function updateCard(card, data, contacts) {
 
     card.appendChild(details);
     card.contactData = data;
-
-    // Add a visual indicator if favorite
-    if (data.favorite) {
-        card.classList.add('favorite-highlight');
-    } else {
-        card.classList.remove('favorite-highlight');
-    }
-
     attachControls(card, contacts);
 }
 
@@ -132,14 +97,10 @@ function attachControls(card, contacts) {
     if (!card.querySelector('.editContact')) {
         card.appendChild(createEditButton(card, contacts));
     }
-    if (!card.querySelector('.favoriteContact')) {
-        card.appendChild(createFavoriteButton(card, contacts));
-    }
 
     card.addEventListener('click', e => {
         if (!e.target.classList.contains('deleteContact') &&
             !e.target.classList.contains('editContact') &&
-            !e.target.classList.contains('favoriteContact') &&
             !e.target.classList.contains('add-picture-btn')) {
             createContactPopup(card);
         }
@@ -153,15 +114,6 @@ function renderContact(data, container, contacts) {
     card.contactData = data;
     updateCard(card, data, contacts);
     container.appendChild(card);
-}
-
-// --- Render All Contacts ---
-function renderAllContacts(contacts) {
-    const container = document.querySelector('.container');
-    container.innerHTML = '';
-    sortContacts(contacts).forEach(contact => {
-        renderContact(contact, container, contacts);
-    });
 }
 
 // --- Contact Popup ---
@@ -210,8 +162,9 @@ function createContactPopup(card) {
 }
 
 // --- Load All Contacts ---
+const container = document.querySelector('.container');
 let contacts = loadContactsFromStorage();
-renderAllContacts(contacts);
+contacts.forEach(contact => renderContact(contact, container, contacts));
 
 // --- Add New Contact ---
 document.getElementById('addContact').addEventListener('click', () => {
@@ -219,10 +172,10 @@ document.getElementById('addContact').addEventListener('click', () => {
     const company = document.getElementById('newCompany').value.trim() || '';
     const notes = document.getElementById('newNotes').value.trim() || '';
 
-    const newContact = { name, company, notes, image: '', favorite: false };
+    const newContact = { name, company, notes, image: '' };
     contacts.push(newContact);
     saveContactsToStorage(contacts);
-    renderAllContacts(contacts);
+    renderContact(newContact, container, contacts);
 
     // clear inputs
     document.getElementById('newName').value = '';
