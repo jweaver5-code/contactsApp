@@ -20,6 +20,14 @@
       border-radius: 8px;
       box-shadow: 0 4px 6px rgba(0,0,0,0.3);
     }
+    
+    .container h1 {
+      font-size: 3em;
+      margin-bottom: 30px;
+      text-align: center;
+      color: #ffd700;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
     .contact-card {
       display: flex;
       align-items: center;
@@ -57,7 +65,7 @@
       color: #ccc;
     }
     #searchBar {
-      width: 100%;
+      width: 97%;
       padding: 10px;
       margin-bottom: 20px;
       border: 1px solid #ddd;
@@ -106,8 +114,8 @@
       color: #fff;
       border: none;
       border-radius: 5px;
-      padding: 5px 10px;
-      font-size: 12px;
+      padding: 6px 8px;
+      font-size: 17px;
       cursor: pointer;
     }
     /* --- Favorites --- */
@@ -128,10 +136,343 @@
     .contact-card.favorite-highlight .favoriteContact {
       color: gold;
     }
+    
+    /* Add Profile Picture Button */
+    .addProfilePicture {
+      position: absolute;
+      bottom: 10px;
+      left: 23px;
+      background: #8b5e3c;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 6px 8px;
+      font-size: 12px;
+      cursor: pointer;
+      max-width: 140px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .addProfilePicture:hover {
+      background: #6e4f4f;
+    }
+    
+    /* Assign Event Button */
+    .assignEvent {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      background: #8b5e3c;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      padding: 6px 8px;
+      font-size: 11px;
+      cursor: pointer;
+      max-width: 120px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    
+    .assignEvent:hover {
+      background: #6e4f4f;
+    }
+    
+    /* Event Assignment Dropdown */
+    .event-dropdown-container {
+      position: absolute;
+      z-index: 1000;
+    }
+    
+    .event-dropdown {
+      background: #5c4033;
+      color: #fff;
+      border: 2px solid #8b5e3c;
+      border-radius: 5px;
+      padding: 8px 12px;
+      font-size: 12px;
+      cursor: pointer;
+      min-width: 120px;
+      outline: none;
+    }
+    
+    .event-dropdown:hover {
+      border-color: #ffd700;
+    }
+    
+    .event-dropdown option {
+      background: #5c4033;
+      color: #fff;
+      padding: 5px;
+    }
+    
+    /* Section Headers */
+    .section-header {
+      margin: 30px 0 15px 0;
+      padding: 10px 0;
+      border-bottom: 2px solid #8b5e3c;
+    }
+    
+    .section-header h2 {
+      margin: 0;
+      color: #ffd700;
+      font-size: 1.3em;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+    }
+    
+    .section-header:first-child {
+      margin-top: 0;
+    }
+    
+    /* Menu Header Container */
+    .menu-header-container {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      z-index: 1001;
+    }
+    
+    /* Hamburger Menu Button */
+    .menu-button {
+      width: 30px;
+      height: 25px;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    
+    .hamburger-line {
+      width: 100%;
+      height: 3px;
+      background-color: #ffd700;
+      border-radius: 2px;
+      transition: all 0.3s ease;
+    }
+    
+    .menu-button:hover .hamburger-line {
+      background-color: #fff;
+    }
+    
+    .menu-button.hide .hamburger-line {
+      opacity: 0;
+      visibility: hidden;
+    }
+    
+    .menu-title {
+      margin: 0;
+      color: #ffd700;
+      font-size: 1.5em;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    
+    .menu-title.show {
+      opacity: 1;
+      visibility: visible;
+    }
+    
+    /* Side Menu */
+    .side-menu {
+      position: fixed;
+      top: 0;
+      left: -300px;
+      width: 300px;
+      height: 100vh;
+      background-color: #5c4033;
+      z-index: 1000;
+      transition: left 0.3s ease;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+    }
+    
+    .side-menu.open {
+      left: 0;
+    }
+    
+    .menu-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px;
+      border-bottom: 2px solid #8b5e3c;
+    }
+    
+    .menu-header h2 {
+      margin: 0;
+      color: #ffd700;
+      font-size: 1.5em;
+    }
+    
+    .close-menu {
+      background: none;
+      border: none;
+      color: #fff;
+      font-size: 24px;
+      cursor: pointer;
+      padding: 0;
+      width: 30px;
+      height: 30px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    .close-menu:hover {
+      color: #ffd700;
+    }
+    
+    .menu-content {
+      padding: 20px;
+    }
+    
+    .menu-item {
+      padding: 15px;
+      margin: 5px 0;
+      background-color: #6e4f4f;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      color: #fff;
+      font-size: 1.1em;
+    }
+    
+    .menu-item:hover {
+      background-color: #8b5e3c;
+    }
+    
+    .menu-item.active {
+      background-color: #ffd700;
+      color: #4b2e2e;
+    }
+    
+    .events-list {
+      margin-top: 10px;
+      padding-left: 20px;
+    }
+    
+    .event-item {
+      padding: 10px;
+      margin: 3px 0;
+      background-color: #7a5c4d;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      color: #fff;
+      font-size: 0.9em;
+    }
+    
+    .event-item:hover {
+      background-color: #8b5e3c;
+    }
+    
+    .event-item.active {
+      background-color: #ffd700;
+      color: #4b2e2e;
+    }
+    
+    /* Delete Event Button */
+    .delete-event-btn {
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: #8b5e3c;
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 20px;
+      height: 20px;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background-color 0.2s ease;
+    }
+    
+    .delete-event-btn:hover {
+      background: #6e4f4f;
+    }
+    
+    .event-item {
+      position: relative;
+      padding-right: 35px;
+    }
+    
+    /* Event Page */
+    .event-page {
+      width: 100%;
+    }
+    
+    .event-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 30px;
+      gap: 20px;
+    }
+    
+    .back-button {
+      background: #8b5e3c;
+      color: #fff;
+      border: none;
+      border-radius: 8px;
+      padding: 10px 15px;
+      cursor: pointer;
+      font-size: 1em;
+      transition: background-color 0.2s ease;
+    }
+    
+    .back-button:hover {
+      background: #6e4f4f;
+    }
+    
+    .event-header h2 {
+      margin: 0;
+      color: #ffd700;
+      font-size: 2em;
+      text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    
+    /* Menu Overlay */
+    .menu-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0,0,0,0.5);
+      z-index: 999;
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s ease;
+    }
+    
+    .menu-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
   </style>
 </head>
 <body>
   <div class="container">
+    <!-- Hamburger Menu Button and Menu Text -->
+    <div class="menu-header-container">
+      <div class="menu-button" id="menuButton">
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+        <div class="hamburger-line"></div>
+      </div>
+      <h2 class="menu-title">Menu</h2>
+    </div>
+    
     <h1>Contacts</h1>
 
     <input type="text" id="searchBar" placeholder="Search by name, company, or notes...">
@@ -143,6 +484,17 @@
       <button id="addContact">Add</button>
     </div>
 
+    <div class="contact-list"></div>
+    
+    <!-- Event Page (hidden by default) -->
+    <div class="event-page" id="eventPage" style="display: none;">
+      <div class="event-header">
+        <button class="back-button" id="backButton">← Back to All Contacts</button>
+        <h2 id="eventPageTitle">Event Contacts</h2>
+      </div>
+      <div class="event-contacts-list" id="eventContactsList"></div>
+    </div>
+
     <script>
       // Ensure the Add Contact controls are visible
       const addContactControls = document.getElementById('addContactControls');
@@ -152,13 +504,130 @@
         console.error('Add Contact controls not found. Ensure the element with ID "addContactControls" exists in the HTML.');
       }
 
-      // Load the main contacts script
-      const script = document.createElement('script');
-      script.src = './contacts.js';
-      script.onload = () => console.log('contacts.js loaded successfully');
-      script.onerror = () => console.error('Failed to load contacts.js. Ensure the file exists in the correct directory.');
-      document.body.appendChild(script);
+             // Load the main contacts script
+       const script = document.createElement('script');
+       script.src = './contacts.js';
+       script.onload = () => {
+         console.log('contacts.js loaded successfully');
+         // Initialize events list after script is loaded
+         if (typeof updateEventsList === 'function') {
+           setTimeout(() => {
+             updateEventsList();
+           }, 100);
+         }
+       };
+       script.onerror = () => console.error('Failed to load contacts.js. Ensure the file exists in the correct directory.');
+       document.body.appendChild(script);
+      
+      // Menu functionality - wait for DOM to be fully loaded
+      document.addEventListener('DOMContentLoaded', () => {
+        const menuButton = document.getElementById('menuButton');
+        const sideMenu = document.getElementById('sideMenu');
+        const closeMenu = document.getElementById('closeMenu');
+        const menuOverlay = document.getElementById('menuOverlay');
+        const eventsTab = document.getElementById('eventsTab');
+        const eventsList = document.getElementById('eventsList');
+        const allContactsTab = document.getElementById('allContactsTab');
+        
+        if (menuButton && sideMenu && closeMenu && menuOverlay) {
+                     // Open menu
+           menuButton.addEventListener('click', () => {
+             console.log('Menu button clicked');
+             sideMenu.classList.add('open');
+             menuOverlay.classList.add('open');
+             
+             // Show menu title and hide hamburger bars
+             const menuTitle = document.querySelector('.menu-title');
+             if (menuTitle) menuTitle.classList.add('show');
+             menuButton.classList.add('hide');
+           });
+          
+                     // Close menu
+           function closeMenuFunc() {
+             sideMenu.classList.remove('open');
+             menuOverlay.classList.remove('open');
+             
+             // Hide menu title and show hamburger bars
+             const menuTitle = document.querySelector('.menu-title');
+             if (menuTitle) menuTitle.classList.remove('show');
+             menuButton.classList.remove('hide');
+           }
+          
+          closeMenu.addEventListener('click', closeMenuFunc);
+          menuOverlay.addEventListener('click', closeMenuFunc);
+          
+          // Toggle events list
+          if (eventsTab && eventsList) {
+            eventsTab.addEventListener('click', () => {
+              eventsList.style.display = eventsList.style.display === 'none' ? 'block' : 'none';
+            });
+          }
+          
+          // Handle add event tab
+          const addEventTab = document.getElementById('addEventTab');
+          if (addEventTab) {
+            addEventTab.addEventListener('click', () => {
+              if (typeof addNewEvent === 'function') {
+                addNewEvent();
+              }
+              closeMenuFunc();
+            });
+          }
+          
+          // Handle all contacts tab
+          if (allContactsTab) {
+            allContactsTab.addEventListener('click', () => {
+              if (typeof showAllContacts === 'function') {
+                showAllContacts();
+              }
+              closeMenuFunc();
+            });
+          }
+          
+          // Handle back button
+          const backButton = document.getElementById('backButton');
+          if (backButton) {
+            backButton.addEventListener('click', () => {
+              if (typeof showAllContacts === 'function') {
+                showAllContacts();
+              }
+            });
+          }
+        } else {
+          console.error('Some menu elements not found:', {
+            menuButton: !!menuButton,
+            sideMenu: !!sideMenu,
+            closeMenu: !!closeMenu,
+            menuOverlay: !!menuOverlay
+          });
+        }
+      });
     </script>
   </div>
+  
+     <!-- Side Menu -->
+   <div class="side-menu" id="sideMenu">
+     <div class="menu-header">
+       <h2></h2>
+       <button class="close-menu" id="closeMenu">×</button>
+     </div>
+    <div class="menu-content">
+      <div class="menu-item" id="allContactsTab">
+        <span>📋 All Contacts</span>
+      </div>
+      <div class="menu-item" id="eventsTab">
+        <span>🎉 Events</span>
+      </div>
+      <div class="events-list" id="eventsList" style="display: none;">
+        <!-- Events will be populated dynamically by JavaScript -->
+      </div>
+      <div class="menu-item" id="addEventTab">
+        <span>➕ Add New Event</span>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Overlay for menu background -->
+  <div class="menu-overlay" id="menuOverlay"></div>
 </body>
 </html>
