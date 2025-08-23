@@ -14,11 +14,28 @@
     }
     .container {
       max-width: 800px;
-      margin: 50px auto;
+      width: 95%;
+      margin: 20px auto;
       background: #5c4033;
       padding: 20px;
       border-radius: 8px;
       box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+    }
+    
+    @media (max-width: 768px) {
+      .container {
+        width: 90%;
+        margin: 10px auto;
+        padding: 15px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .container {
+        width: 95%;
+        margin: 5px auto;
+        padding: 10px;
+      }
     }
     
     .container h1 {
@@ -27,6 +44,106 @@
       text-align: center;
       color: #ffd700;
       text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    }
+    
+    @media (max-width: 768px) {
+      .container h1 {
+        font-size: 2.5em;
+        margin-bottom: 20px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .container h1 {
+        font-size: 2em;
+        margin-bottom: 15px;
+      }
+    }
+    
+    /* Touch-friendly improvements for mobile */
+    @media (max-width: 768px) {
+      .menu-item, .event-item {
+        min-height: 44px; /* iOS minimum touch target */
+        display: flex;
+        align-items: center;
+      }
+      
+      .delete-event-btn {
+        min-width: 44px;
+        min-height: 44px;
+      }
+      
+      .close-menu {
+        min-width: 44px;
+        min-height: 44px;
+      }
+      
+      /* Mobile-specific button improvements */
+      .deleteContact, .editContact, .favoriteContact {
+        min-width: 44px;
+        min-height: 44px;
+      }
+      
+      /* Better mobile spacing */
+      .contact-details h3 {
+        font-size: 1.3em;
+        margin-bottom: 8px;
+      }
+      
+      .contact-details p {
+        font-size: 0.9em;
+        margin: 3px 0;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      /* Phone-specific improvements */
+      .contact-details h3 {
+        font-size: 1.2em;
+        margin-bottom: 6px;
+      }
+      
+      .contact-details p {
+        font-size: 0.85em;
+        margin: 2px 0;
+      }
+      
+      /* Smaller margins for phone */
+      .section-header {
+        margin: 20px 0 10px 0;
+        padding: 8px 0;
+      }
+      
+      .section-header h2 {
+        font-size: 1.1em;
+      }
+    }
+    
+    /* Prevent text selection on mobile */
+    .contact-card {
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
+    }
+    
+    /* Mobile-specific improvements */
+    @media (max-width: 480px) {
+      /* Better button spacing for small screens */
+      .contact-card {
+        min-height: 200px; /* Ensure consistent card height */
+      }
+      
+      /* Prevent horizontal scrolling */
+      body {
+        overflow-x: hidden;
+      }
+      
+      /* Better touch targets */
+      button, .menu-item, .event-item {
+        cursor: pointer;
+        -webkit-tap-highlight-color: rgba(255, 215, 0, 0.3);
+      }
     }
     .contact-card {
       display: flex;
@@ -39,6 +156,21 @@
       position: relative;
       transition: transform 0.2s, box-shadow 0.2s;
     }
+    
+    @media (max-width: 768px) {
+      .contact-card {
+        flex-direction: column;
+        text-align: center;
+        padding: 15px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .contact-card {
+        padding: 10px;
+        margin-bottom: 15px;
+      }
+    }
     .contact-card:hover {
       transform: translateY(-2px);
       box-shadow: 0 4px 10px rgba(0,0,0,0.4);
@@ -49,6 +181,23 @@
       border-radius: 8px;
       margin-right: 20px;
       object-fit: cover;
+    }
+    
+    @media (max-width: 768px) {
+      .contact-card img {
+        width: 100px;
+        height: 100px;
+        margin-right: 0;
+        margin-bottom: 15px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .contact-card img {
+        width: 80px;
+        height: 80px;
+        margin-bottom: 10px;
+      }
     }
     .contact-details { flex: 1; }
     .contact-details h3 {
@@ -71,6 +220,38 @@
       border: 1px solid #ddd;
       border-radius: 8px;
     }
+    
+    @media (max-width: 768px) {
+      #searchBar {
+        width: 95%;
+        padding: 8px;
+        margin-bottom: 15px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      #searchBar {
+        width: 90%;
+        padding: 6px;
+        margin-bottom: 10px;
+        font-size: 16px; /* Prevents zoom on iOS */
+      }
+    }
+    
+    /* Mobile input improvements */
+    @media (max-width: 768px) {
+      #searchBar, #addContactControls input {
+        font-size: 16px; /* Prevents zoom on iOS */
+        -webkit-appearance: none;
+        border-radius: 8px;
+      }
+      
+      #addContactControls button {
+        font-size: 16px;
+        -webkit-appearance: none;
+        border-radius: 8px;
+      }
+    }
     #addContactControls {
       display: none;
       margin-bottom: 20px;
@@ -83,6 +264,35 @@
       border: none;
       border-radius: 5px;
       cursor: pointer;
+    }
+    
+    @media (max-width: 768px) {
+      #addContactControls {
+        flex-direction: column;
+        gap: 10px;
+        margin-bottom: 15px;
+      }
+      #addContactControls input {
+        margin-right: 0;
+        padding: 8px;
+        font-size: 16px;
+      }
+      #addContactControls button {
+        padding: 10px;
+        font-size: 16px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      #addContactControls {
+        margin-bottom: 10px;
+      }
+      #addContactControls input {
+        padding: 6px;
+      }
+      #addContactControls button {
+        padding: 8px;
+      }
     }
     #addContactToggle {
       margin-bottom: 20px;
@@ -106,6 +316,26 @@
       font-size: 16px;
       cursor: pointer;
     }
+    
+    @media (max-width: 768px) {
+      .deleteContact {
+        top: 8px;
+        right: 8px;
+        width: 28px;
+        height: 28px;
+        font-size: 14px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .deleteContact {
+        top: 5px;
+        right: 5px;
+        width: 25px;
+        height: 25px;
+        font-size: 12px;
+      }
+    }
     .editContact {
       position: absolute;
       top: 10px;
@@ -118,6 +348,24 @@
       font-size: 17px;
       cursor: pointer;
     }
+    
+    @media (max-width: 768px) {
+      .editContact {
+        top: 8px;
+        right: 45px;
+        padding: 5px 6px;
+        font-size: 15px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .editContact {
+        top: 5px;
+        right: 40px;
+        padding: 4px 5px;
+        font-size: 13px;
+      }
+    }
     /* --- Favorites --- */
     .favoriteContact {
       position: absolute;
@@ -128,6 +376,22 @@
       font-size: 20px;
       cursor: pointer;
       color: #bbb;
+    }
+    
+    @media (max-width: 768px) {
+      .favoriteContact {
+        top: 8px;
+        left: 8px;
+        font-size: 18px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .favoriteContact {
+        top: 5px;
+        left: 5px;
+        font-size: 16px;
+      }
     }
     .contact-card.favorite-highlight {
       border: 2px solid gold;
@@ -155,6 +419,26 @@
       text-overflow: ellipsis;
     }
     
+    @media (max-width: 768px) {
+      .addProfilePicture {
+        bottom: 8px;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 11px;
+        padding: 5px 6px;
+        max-width: 120px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .addProfilePicture {
+        bottom: 5px;
+        font-size: 10px;
+        padding: 4px 5px;
+        max-width: 100px;
+      }
+    }
+    
     .addProfilePicture:hover {
       background: #6e4f4f;
     }
@@ -177,6 +461,26 @@
       text-overflow: ellipsis;
     }
     
+    @media (max-width: 768px) {
+      .assignEvent {
+        bottom: 8px;
+        right: 8px;
+        font-size: 10px;
+        padding: 5px 6px;
+        max-width: 100px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .assignEvent {
+        bottom: 5px;
+        right: 5px;
+        font-size: 9px;
+        padding: 4px 5px;
+        max-width: 80px;
+      }
+    }
+    
     .assignEvent:hover {
       background: #6e4f4f;
     }
@@ -185,6 +489,30 @@
     .event-dropdown-container {
       position: absolute;
       z-index: 1000;
+    }
+    
+    @media (max-width: 768px) {
+      .event-dropdown-container {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 10000;
+      }
+      
+      .event-dropdown {
+        min-width: 200px;
+        font-size: 16px;
+        padding: 12px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .event-dropdown {
+        min-width: 180px;
+        font-size: 14px;
+        padding: 10px;
+      }
     }
     
     .event-dropdown {
@@ -236,6 +564,22 @@
       align-items: center;
       gap: 15px;
       z-index: 1001;
+    }
+    
+    @media (max-width: 768px) {
+      .menu-header-container {
+        top: 15px;
+        left: 15px;
+        gap: 12px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .menu-header-container {
+        top: 10px;
+        left: 10px;
+        gap: 10px;
+      }
     }
     
     /* Hamburger Menu Button */
@@ -291,6 +635,38 @@
       z-index: 1000;
       transition: left 0.3s ease;
       box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+    }
+    
+    @media (max-width: 768px) {
+      .side-menu {
+        width: 280px;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .side-menu {
+        width: 250px;
+      }
+      
+      .menu-content {
+        padding: 15px;
+      }
+      
+      .menu-item {
+        padding: 12px;
+        margin: 4px 0;
+        font-size: 1em;
+      }
+      
+      .event-item {
+        padding: 8px;
+        margin: 2px 0;
+        font-size: 0.85em;
+      }
+      
+      .events-list {
+        padding-left: 15px;
+      }
     }
     
     .side-menu.open {
@@ -441,6 +817,41 @@
       text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
     }
     
+    @media (max-width: 768px) {
+      .event-header {
+        flex-direction: column;
+        gap: 15px;
+        margin-bottom: 20px;
+      }
+      
+      .event-header h2 {
+        font-size: 1.8em;
+        text-align: center;
+      }
+      
+      .back-button {
+        align-self: flex-start;
+        padding: 8px 12px;
+        font-size: 0.9em;
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .event-header {
+        margin-bottom: 15px;
+        gap: 10px;
+      }
+      
+      .event-header h2 {
+        font-size: 1.5em;
+      }
+      
+      .back-button {
+        padding: 6px 10px;
+        font-size: 0.85em;
+      }
+    }
+    
     /* Menu Overlay */
     .menu-overlay {
       position: fixed;
@@ -519,8 +930,19 @@
        script.onerror = () => console.error('Failed to load contacts.js. Ensure the file exists in the correct directory.');
        document.body.appendChild(script);
       
-      // Menu functionality - wait for DOM to be fully loaded
-      document.addEventListener('DOMContentLoaded', () => {
+             // Menu functionality - wait for DOM to be fully loaded
+       document.addEventListener('DOMContentLoaded', () => {
+         
+         // Mobile-specific improvements
+         if (window.innerWidth <= 768) {
+           // Prevent double-tap zoom on mobile
+           document.addEventListener('touchend', function(event) {
+             event.preventDefault();
+           }, { passive: false });
+           
+           // Better touch handling for mobile
+           document.addEventListener('touchstart', function() {}, { passive: true });
+         }
         const menuButton = document.getElementById('menuButton');
         const sideMenu = document.getElementById('sideMenu');
         const closeMenu = document.getElementById('closeMenu');
